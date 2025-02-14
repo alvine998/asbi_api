@@ -1,7 +1,8 @@
 version: '3.8'
 
 services:
-  app:
+  express-app:
+    container_name: asbi-api
     build: .
     ports:
       - "4001:4001"
