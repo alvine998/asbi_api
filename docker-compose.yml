@@ -11,3 +11,6 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+networks:
+  web:
+    external: true
