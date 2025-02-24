@@ -33,6 +33,7 @@ exports.list = async (req, res) => {
             },
             order: [
                 req.query.popular == '1' ? ['viewers', 'DESC'] : ['createdAt', 'DESC'],
+                req.query.unpopular == '1' ? ['viewers', 'ASC'] : ['createdAt', 'DESC'],
             ],
             attributes: { exclude: ['deletedAt'] },
             ...req.query.pagination == 'true' && {
