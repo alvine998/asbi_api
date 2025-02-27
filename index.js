@@ -15,6 +15,12 @@ var corsOptions = {
     origin: '*'
 };
 
+// parse requests of content-type - application/json
+app.use(express.json());
+// Increase the payload limit
+app.use(bodyParser.json({ limit: "50mb" }));  // Increase JSON limit
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));  // Increase URL-encoded limit
+
 app.use(cors(corsOptions));
 const db = require("./api/models");
 db.sequelize.sync()
@@ -25,12 +31,6 @@ db.sequelize.sync()
         console.log(err);
         console.log("Failed to sync db: " + err.message);
     });
-
-// parse requests of content-type - application/json
-app.use(express.json());
-// Increase the payload limit
-app.use(bodyParser.json({ limit: "500mb" }));  // Increase JSON limit
-app.use(bodyParser.urlencoded({ limit: "500mb", extended: true }));  // Increase URL-encoded limit
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
