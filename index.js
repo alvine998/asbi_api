@@ -164,14 +164,28 @@ app.post("/upload/v2", upload2.single("image"), (req, res) => {
     }
 });
 
-app.post("/upload/video", uploadVideo.single("video"), async (req, res) => {
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ["video/mp4", "video/mkv", "video/webm", "video/avi"];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Only video files are allowed!"), false);
+    }
+};
+// Set up multer
+const uploadVideo2 = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size (500MB)
+    fileFilter: fileFilter,
+});
+app.post("/upload/video", uploadVideo2.single("video"), async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
+            return res.status(400).json({ message: "No video uploaded" });
         }
         res.status(200).json({
             message: "File uploaded successfully",
-            filePath: req.file.path,
+            filePath: `/uploads/${req.file.filename}`,
         });
     } catch (error) {
         console.log(error);
